@@ -1,0 +1,1345 @@
+Shopify objects that contain attributes that can be dynamically put on the page. For example, the product object contains an attribute called title that can be used to output the title of a product.
+
+The handle is used to access the attributes of a Liquid object. By default, it is the object’s title in lowercase with any spaces and special characters replaced by hyphens (-). Every object in Liquid (product, collection, blog, menu) has a handle.
+
+Collections & Products
+Collection :
+all_types :
+Returns a list of all the product types for a collection
+
+
+{% for type in collection.all_types %}
+	{{ type | link_to_type }}
+{% endfor %}
+
+returns
+
+Accessories
+Chairs
+Shoes
+
+all_products_count :
+Returns the number of products in a certain collection
+
+
+{{ collection.all_products_count }}
+
+returns
+
+42
+
+all_vendors :
+Returns a list of all the product vendors for a collection
+
+
+{% for vendor in collection.all_vendors %}
+	{{ vendor }}
+{% endfor %}
+
+returns
+
+Supplier Company
+Dropshipping Company
+
+current_type :
+Returns the product type on a /collections/types?q=TYPE collection page. For example, an automatic "Shirts" collection lists all products of type "Shirts" in the store:
+
+
+{% if collection.current_type %}
+Browse all our {{ collection.current_type | downcase }}.
+{% endif %}
+
+returns
+
+Browse all our shirts.
+
+current_vendor :
+Returns the product vendor on a /collections/vendores?q=VENDOR collection page. For example, an automatic "ApparelCo" collection lists all products with the vendor "ApparelCo" in the store: yourstore.myshopify.com/collections/vendors?q=ApparelCo.
+
+
+{% if collection.current_vendor %}
+All products by {{ collection.current_vendor }}.
+{% endif %}
+
+returns
+
+All products by ApparelCo.
+
+default_sort_by :
+Returns the sort order of the collection, which is set on the collection's page in your Shopify admin.
+
+The possible sort orders are:
+
+manual
+best-selling
+title-ascending
+title-descending
+price-ascending
+price-descending
+created-ascending
+created-descending
+description :
+Returns the description of the collection.
+
+
+{{ collection.description }}
+
+returns
+
+This collection includes classic running shoes.
+
+handle :
+Returns the collection's handle.
+
+The handle is generally a slug of the collection title.
+
+
+{{ collection.handle }}
+
+returns
+
+running-shoes
+
+id :
+Returns the ID number of the collection.
+
+
+{{ collection.id }}
+
+returns
+
+328971974
+
+image :
+Returns the collection image. Use the img_url filter to load the image file from the Shopify content delivery network (CDN). Use an if tag to check for the presence of the image first.
+
+
+{% if collection.image %}{{ collection.image | img_url: 'medium' }}{% endif %}
+
+returns
+
+//cdn.shopify.com/s/files/1/0087/0462/collections/collection-image_medium.png?v=1337103726
+
+image.src :
+???
+
+
+{% if collection.image %}{{ collection.image | img_url: 'medium' }}{% endif %}
+
+returns
+
+//cdn.shopify.com/s/files/1/0087/0462/collections/collection-image_medium.png?v=1337103726
+
+					
+next_product :
+Returns the URL of the next product in the collection. Returns nil if there is no next product.
+
+previous_product :
+Returns the URL of the previous product in the collection. Returns nil if there is no previous product.
+
+products :
+Returns all of the products in a collection. You can show a maximum of 50 products per page.
+
+See paginate section for more info.
+
+products_count :
+Returns the number of products in a collection that match the current view.
+
+
+{{ collection.products_count }} products
+
+returns
+
+42 products
+
+published_at :
+Returns the date and time when the collection was published.
+
+template_suffix :
+Returns the name of the custom collection template assigned to the collection, without the collection. prefix or the .liquid suffix. Returns nil if a custom template is not assigned to the collection.
+
+
+{{ collection.template_suffix }}
+
+returns
+
+no-price
+
+title :
+Returns the title of the collection.
+
+
+{{ collection.title }}
+
+returns
+
+Running Shoes
+
+tags :
+Returns the tags of products in a collection that match the current view. For example, if you are viewing a collection filtered by tag, collection.tags will return the tags for the products that match the current filter.
+
+url :
+Returns the URL of the collection.
+
+Product :
+available :
+Returns true if a product is available for purchase. Returns falseif all of the products variants' inventory_quantity values are zero or less, and their inventory_policy is not set to "Allow users to purchase this item, even if it is no longer in stock."
+
+collections :
+Returns an array of all of the collections a product belongs to.
+
+
+{% for collection in product.collections %}
+    {{ collection.title }}
+{% endfor %}
+
+returns
+
+Sale
+Running Shoes
+Shoes
+
+compar_at_price_max :
+Returns the highest compare at price. Use one of the money filters to return the value in a monetary format.
+
+compar_at_price_min :
+Returns the lowest compare at price. Use one of the money filters to return the value in a monetary format.
+
+compar_at_price_varies :
+Returns true if the compare_at_price_min is different from the compare_at_price_max. Returns false if they are the same.
+
+content :
+Returns the description of the product. Alias for product.description.
+
+description :
+Returns the description of the product.
+
+featured_image :
+Returns the relative URL of the product's featured image.
+
+first_available_variant :
+Returns the variant object of the first product variant that is available for purchase. In order for a variant to be available, its variant.inventory_quantity must be greater than zero or variant.inventory_policy must be set to continue. A variant with no inventory_policy is considered available.
+
+handle :
+Returns the handle of a product.
+
+id :
+Returns the id of the product.
+
+images :
+Returns an array of the product's images. Use the product_img_url filter to link to the product image on Shopify's Content Delivery Network.
+
+image :
+Returns an array of the product's images. Use the product_img_url filter to link to the product image on Shopify's Content Delivery Network.
+
+
+{% for image in product.images %}
+    <img src="{{ image.src | product_img_url: 'medium' }}">
+{% endfor %}
+
+returns
+
+
+options :
+Returns an array of the product's option names.
+
+
+{% for option in product.options %}
+    {{ option }}
+{% endfor %}
+
+returns
+
+Color Size Material
+
+Use size if you need to determine how many options a product has.
+
+{{ product.options.size }}
+
+returns
+
+3
+options_with_values :
+Returns an array of the product's options including their available and currently selected values.
+
+
+{% for option in product.options_with_values %}
+  
+    {{ option.name }}
+  
+{% endfor %}
+
+returns
+
+
+  Color
+
+
+price :
+Returns the minimum price of all variants of the product. This is the same as product.min_price. Use one of the money filters to return the value in a monetary format.
+
+price_max :
+Returns the highest price of the product. Use one of the money filters to return the value in a monetary format.
+
+price_min :
+Returns the lowest price of the product. Use one of the money filters to return the value in a monetary format.
+
+price_varies :
+Returns true if the product's variants have varying prices. Returns false if all of the product's variants have the same price.
+
+selected_variant :
+Returns the variant object of the currently-selected variant if there is a valid ?variant= parameter in the URL. Returns nil if there is not.
+
+select_or_first_availble_variant :
+Returns the variant object of the currently-selected variant if there is a valid ?variant= query parameter in the URL. If there is no selected variant, the first available variant is returned. In order for a variant to be available, its variant.inventory_quantity must be greater than zero or variant.inventory_policy must be set to continue. A variant with no inventory_management is considered available.
+
+tags :
+Returns an array of all of the product's tags. The tags are returned in alphabetical order.
+
+
+{% for tag in product.tags %}
+    {{ tag }}
+{% endfor %}
+
+returns
+
+new
+leather
+sale
+special
+
+template_suffix :
+Returns the name of the custom product template assigned to the product, without the product. prefix nor the .liquid suffix. Returns nil if a custom template is not assigned to the product.
+
+
+
+{{ product.template_suffix }}
+
+returns
+
+wholesale
+
+title :
+Returns the title of the product.
+
+type :
+Returns the type of the product.
+
+url :
+Returns the relative URL of the product.
+
+variants :
+Returns an array the product's variants.
+
+vendor :
+Returns the vendor of the product.
+
+Variant :
+available :
+Returns true if the variant is available for purchase, or false if it not. For a variant to be available, its variant.inventory_quantity must be greater than zero or variant.inventory_policy must be set to continue. A variant with no variant.inventory_management is also considered available.
+
+barcode :
+Returns the variant's barcode.
+
+compare_at_price :
+Returns the variant's compare at price. Use a money filter to return the value in a monetary format.
+
+id :
+Returns the variant's unique ID.
+
+image :
+Returns the image object associated with the variant.
+
+incoming :
+Returns true if the variant has incoming inventory.
+
+inventory_management :
+Returns the variant's inventory tracking service.
+
+inventory_policy :
+Returns the string continue if the "Allow users to purchase this item, even if it is no longer in stock." checkbox is checked in the variant options in the Admin. Returns deny if it is unchecked.
+
+inventory_quantity :
+Returns the variant's inventory quantity.
+
+next_incoming_date :
+eturns the date when the next incoming inventory will arrive.
+
+option1 :
+Returns the value of the variant's first option.
+
+option2 :
+Returns the value of the variant's second option.
+
+option3 :
+Returns the value of the variant's third option.
+
+price :
+Returns the variant's price. Use a money filter to return the value in a monetary format.
+
+requires_shipping :
+Returns true if the variant is set to require shipping, or false if it does not.
+
+selected :
+Returns true if the variant is currently selected by the ?variant= URL parameter, or false if it is not.
+
+sku :
+Returns the variant's SKU.
+
+taxable :
+Returns true if taxes are charged for the variant, or false if they are not.
+
+title :
+Returns the concatenation of all the variant's option values, joined by / characters.
+
+url :
+Returns a URL that is unique to only one product variant. The variant ID is used as the unique identifier.
+
+weight :
+Returns the variant's weight in grams. Use the weight_with_unit filter to convert it to your store's weight format or the weight unit configured on the variant.
+
+weight_unit :
+Returns the unit for the weight configured on the variant. Works well paired with the weight_in_unit attribute and the weight_with_unit filter.
+
+weight_in_unit :
+Returns the weight of the product converted to the unit configured on the variant. Works well paired with the weight_unit attribute and the weight_with_unit filter.
+
+The Shop
+Shop :
+address :
+You can add attributes to shop.address to return information about a shop's address.
+
+shop.address.summary
+The summary takes the form street, city, state/province, country.
+
+shop.address.street
+shop.address.city
+shop.address.province
+shop.address.province_code
+shop.address.country
+shop.address.country_upper
+shop.address.zip
+collections_count :
+Returns the number of collections in a shop.
+
+currency :
+Returns the shop's currency in three-letter format (ex: CAD).
+
+description :
+Returns the description of the shop.
+
+domain :
+Returns the primary domain of the shop.
+
+email :
+Returns the shop's email address.
+
+enabled_payment_types :
+Returns an array of accepted credit cards for the shop. Use the payment_type_img_url filter to link to the SVG image file of the credit card.
+
+metafields :
+Returns the shop's metafields. Metafields can only be set using the Shopify API .
+
+money_format :
+Returns a string that is used by Shopify to format money without showing the currency.
+
+money_with_currency_format :
+Returns a string that is used by Shopify to format money while also displaying the currency.
+
+name :
+Returns the shop's name.
+
+password_message :
+Returns the shop's password page message.
+
+permanent_domain :
+Returns the .myshopify.com URL of a shop.
+
+products_count :
+Returns the number of products in a shop.
+
+types :
+Returns an array of all unique product types in a shop.
+
+url :
+Returns the full URL of a shop.
+
+secure_url :
+Returns the full URL of a shop prepended by the https protocol.
+
+vendors :
+Returns an array of all unique vendors in a shop.
+
+locale :
+Returns the locale that the shop is currently displayed in (ex: en, fr, pt-BR). See the documentation on theme translations for more details on this feature.
+
+Blog :
+all_tags :
+Returns all tags of all articles of a blog. This includes tags of articles that are not in the current pagination view
+
+articles :
+Returns an array of all articles in a blog. See this page for a list of all available attributes for article.
+
+articles_count :
+Returns the total number of articles in a blog. This total does not include hidden articles.
+
+comments_enabled? :
+Returns true if comments are enabled, or false if they are disabled.
+
+handle :
+Returns the handle of the blog.
+
+id :
+Returns the id of the blog.
+
+moderated? :
+Returns true if comments are moderated, or false if they are not moderated.
+
+next_article :
+Returns the URL of the next (older) post. Returns false if there is no next article.
+
+previous_article :
+Returns the URL of the previous (newer) post. Returns false if there is no next article.
+
+tags :
+Returns all tags in a blog. Similar to all_tags, but only returns tags of articles that are in the filtered view.
+
+title :
+Returns the title of the blog.
+
+url :
+Returns the relative URL of the blog.
+
+Article :
+author :
+Returns the full name of the article's author.
+
+comments :
+Returns the published comments of an article. Returns an empty array if comments are disabled.
+
+comments_count :
+Returns the number of published comments for an article.
+
+comments_enabled? :
+Returns true if comments are enabled. Returns false if comments are disabled.
+
+comment_post_url :
+Returns the relative URL where POST requests are sent to when creating new comments.
+
+content :
+Returns the content of an article.
+
+created_at :
+Returns the timestamp of when an article was created. Use the date filter to format the timestamp
+
+excerpt :
+Returns the excerpt of an article.
+
+excerpt_or_content :
+Returns article.excerpt of an article if it exists. Returns article.content if an excerpt does not exist for the article.
+
+id :
+Returns the id of an article.
+
+image :
+Returns the article image. Use the img_url filter to link it to the image file on the Shopify CDN. Check for the presence of the image first.
+
+image.src :
+Returns the relative URL to the article image.
+
+moderated? :
+Returns true if the blog that the article belongs to is set to moderate comments. Returns false if the blog is not moderated.
+
+published_at :
+Returns the date/time when an article was published. Use the date filter to format the timestamp.
+
+tags :
+Returns all the tags for an article.
+
+title :
+Returns the title of an article.
+
+url :
+Returns the relative URL of the article.
+
+user.account_owner :
+Returns "true" if the author of the article is the account owner of the shop. Returns "false" if the author is not the account owner.
+
+user.bio :
+Returns the bio of the author of an article. This is entered through the Staff members options on the Account page.
+
+user.email :
+Returns the email of the author of an article. This is entered through the Staff members options on the Account page.
+
+user.first_name :
+Returns the first name of the author of an article. This is entered through the Staff members options on the Account page.
+
+user.last_name :
+Returns the last name of the author of an article. This is entered through the Staff members options on the Account page.
+
+user.homepage :
+Returns the homepage of the author of an article. This is entered through the Staff members options on the Account page.
+
+Comment :
+id :
+ 
+author
+Returns the author of the comment.
+
+email :
+Returns the e-mail address of the comment's author.
+
+content :
+Returns the content of the comment.
+
+status :
+Returns the status of the comment. The possible values are:
+
+unapproved
+published
+removed
+spam
+url :
+Returns the URL of the article with comment.id appended to it. This is so the page will automatically scroll to the comment.
+
+Page :
+author :
+Returns the author of a page.
+
+content :
+Returns the content of a page.
+
+handle :
+Returns the handle of the page.
+
+id :
+Returns the id of the page.
+
+published_at :
+Returns the timestamp of when the page was created. Use the date filter to format the timestamp.
+
+template_suffix :
+Returns the name of the custom page template assigned to the page, without the page. prefix nor the .liquid suffix. Returns nil if a custom template is not assigned to the page.
+
+title :
+Returns the title of a page.
+
+url :
+Returns the relative URL of the page.
+
+Linklist :
+handle :
+Returns the handle of the linklist.
+
+id :
+Returns the id of the linklist.
+
+links :
+Returns an array of links in the linklist.
+
+title :
+Returns the title of the linklist.
+
+Link :
+active :
+Returns true if the link is active, or false if the link is inactive.
+
+object :
+Returns the variable associated to the link. The possible types are:
+
+product
+collection
+page
+blog
+title :
+Returns the title of the link.
+
+type :
+Returns the type of the link. The possible values are:
+
+collection_link: if the link points to a collection
+product_link: if the link points to a product page
+page_link: if the link points to a page
+blog_link: if the link points to a blog
+relative_link: if the link points to the search page, the home page or /collections/all
+http_link: if the link points to an external web page, or a type or vendor collection (ex: /collections/types?q=Pants)
+url :
+Returns the URL of the link.
+
+Search :
+performed :
+Returns true if an HTML form with the attribute action="/search" was submitted successfully. This allows you to show content based on whether a search was performed or not.
+
+results :
+Returns an array of matching search result items. The items in the array can be a(n):
+
+product
+article
+page
+results_count :
+Returns the number of results found.
+
+terms :
+Returns the string that was entered in the search input box. Use the highlight filter to apply a different style to any instances in the search results that match up with search.terms.
+
+The Customer
+Customer Address :
+first_name :
+Returns the value of the First Name field of the address.
+
+last_name :
+Returns the value of the Last Name field of the address.
+
+address1 :
+Returns the value of the Address1 field of the address.
+
+address2 :
+Returns the value of the Address2 field of the address.
+
+street :
+Returns the combined values of the Address1 and Address2 fields of the address.
+
+company :
+Returns the value of the Company field of the address.
+
+city :
+Returns the value of the City field of the address.
+
+province :
+Returns the value of the Province/State field of the address.
+
+province_code :
+Returns the abbreviated value of the Province/State field of the address.
+
+zip :
+Returns the value of the Postal/Zip field of the address.
+
+country :
+Returns the value of the Country field of the address.
+
+country_code :
+Returns the value of the Country field of the address in ISO 3166-2 standard format.
+
+phone :
+Returns the value of the Phone field of the address.
+
+id :
+Returns the id of customer address.
+
+Customer :
+accepts_marketing :
+Returns true if the customer accepts marketing, returns false if the customer does not.
+
+addresses :
+Returns an array of all addresses associated with a customer. See customer_address for a full list of available attributes.
+
+addresses_count :
+Returns the number of addresses associated with a customer.
+
+default_address :
+Returns the default customer_address.
+
+email :
+Returns the email address of the customer.
+
+first_name :
+Returns the first name of the customer.
+
+has_account :
+Returns true if the email associated with an order is also tied to a customer account. Returns false if it is not. Helpful in email templates. In the theme, that will always be true.
+
+id :
+Returns the id of the customer.
+
+last_name :
+Returns the last name of the customer.
+
+last_order :
+Returns the last order placed by the customer, not including test orders.
+
+name :
+Returns the full name of the customer.
+
+orders :
+Returns an array of all orders placed by the customer.
+
+orders_count :
+Returns the total number of orders a customer has placed.
+
+tags :
+Returns the list of tags associated with the customer.
+
+total_spent :
+Returns the total amount spent on all orders.
+
+Order :
+billing_address :
+Returns the billing address of the order.
+
+cancelled :
+Returns true if an order is canceled, or false if it is not.
+
+cancelled_at :
+Returns the timestamp of when an order was canceled. Use the date filter to format the timestamp.
+
+cancel_reason :
+Returns one of the following cancellation reasons, if an order was canceled:
+
+items unavailable
+fraudulent order
+customer changed/cancelled order
+other
+cancel_reason_label :
+Returns the translated output of an order's order.cancel_reason.
+
+create_at :
+Returns the timestamp of when an order was created. Use the date filter to format the timestamp.
+
+customer :
+Returns the customer associated with the order.
+
+customer_url :
+Returns the URL of the customer's account page.
+
+discounts :
+Returns an array of discounts for an order.
+
+email :
+Returns the email address associated with an order.
+
+financial_status :
+Returns the financial status of an order. The possible values are:
+
+pending
+authorized
+paid
+partially_paid
+refunded
+partially_refunded
+voided
+financial_status_label :
+Returns the translated output of an order's financial_status.
+
+fulfillment_status :
+Returns the fulfillment status of an order.
+
+fulfillment_status_label :
+Returns the translated output of an order's fulfillment_status.
+
+line_items :
+Returns an array of line items for the order.
+
+location :
+(POS only) Returns the physical location of the order. You can configure locations in the Locations settings of your Shopify admin.
+
+order_status_url :
+ 
+name :
+Returns the name of the order in the format set in the Standards and formats section of the General settings of your Shopify admin.
+
+note :
+Returns the note associated with a customer order.
+
+order_number :
+Returns the integer representation of the order name.
+
+shipping_address :
+Returns the shipping address of the order.
+
+shipping_methods :
+Returns an array of shipping_method variables from the order.
+
+shipping_price :
+Returns the shipping price of an order. Use a money filter to show the result as a monetary amount.
+
+subtotal_price :
+Returns the subtotal price of an order. Use a money filter to show the result as a monetary amount.
+
+tax_lines :
+Returns an array of tax_line variables for an order.
+
+tax_price :
+Returns the order's tax price. Use a money filter to show the result as a monetary amount.
+
+total_price :
+Returns the total price of an order. Use a money filter to show the result as a monetary amount.
+
+transactions :
+Returns an array of transactions from the order.
+
+tags :
+Returns an array of all of the order's tags. The tags are returned in alphabetical order.
+
+Theme :
+id :
+Returns the theme's ID. This is useful for when you want to link a user directly to the theme's Customize theme page.
+
+name :
+Returns the name of the theme.
+
+Cart and Checkout
+Cart :
+attributes :
+cart.attributes allow the capturing of more information on the cart page. This is done by giving an input a nameattribute with the following syntax:
+
+
+attributes[attribute-name]
+
+What is your Pet's name?
+
+{{ cart.attributes.your-pet-name }}
+
+
+cart.attributes can be accessed in order email templates, the order status page of the checkout, as well as in apps such as Order Printer.
+
+{{ attributes.your-pet-name }}
+
+returns
+
+Haku
+
+item_count :
+Returns the number of items inside the cart.
+
+items :
+Returns all of the line items in the cart.
+
+note :
+cart.note allows the capturing of more information on the cart page.This is done by submitting the cart form with an HTML textarea and wrapping the cart.note output.
+
+
+Gift note:
+
+{{ cart.note }}
+ 
+NOTE: There can only be one instance of {{ cart.note }} on the cart page. If there are multiple instances, the one that comes latest in the Document Object Model (DOM) will be submitted with the form.
+
+original_total_price :
+Returns the original total of the cart before discounts were applied.
+
+total_price :
+Returns the total price of all of the items in the cart.
+
+total_weight :
+Returns the total weight of all of the items in the cart.
+
+Checkout :
+applied_gift_cards :
+Returns the gift cards applied to the checkout.
+
+attributes :
+Returns the attributes of the checkout, that were captured in the cart.
+
+billing_address :
+Returns the billing address of the checkout.
+
+buyer_accepts_marketing :
+Returns whether the buyer accepted the newsletter during the checkout.
+
+discounts
+Returns the discounts applied to the checkout.
+
+discounts_amount :
+Returns the sum of the amount of the discounts applied to the checkout. Use one of the money filters to return the value in a monetary format.
+
+discount_savings :
+Returns the sum of the savings of the discounts applied to the checkout. The negative opposite of discounts_amount. Use one of the money filters to return the value in a monetary format.
+
+email :
+Returns the email used during the checkout.
+
+gift_cards_amount :
+Returns the amount paid in gift cards of the checkout. Use one of the money filters to return the value in a monetary format.
+
+id :
+Returns the id of the checkout.
+
+line_items :
+Returns all the line items of the checkout.
+
+name :
+Returns the name of the checkout. This value is identical to checkout.id with a hash prepended to it.
+
+note :
+Returns the note of the checkout.
+
+order :
+Returns the order created by the checkout. Depending on the payment gateway, the order might not have been created yet on the checkout order status page and this property could be nil.
+
+order_id :
+Returns the id of the order created by the checkout. Depending on the payment gateway, the order might not have been created yet on the checkout order status page.
+
+order_name :
+Returns the name of the order created by the checkout. Depending on the payment gateway, the order might not have been created yet on the checkout order status page.
+
+order_number :
+Returns the number of the order created by the checkout. Depending on the payment gateway, the order might not have been created yet on the checkout order status page.
+
+requires_shipping :
+Returns whether the checkout as a whole requires shipping, that is whether any of the line items require shipping.
+
+shipping_address :
+Returns the shipping address of the checkout.
+
+shipping_method :
+Returns the shipping method of the checkout.
+
+shipping_methods :
+Returns an array of shipping methods of the checkout.
+
+shipping_price :
+Returns the shipping price of the checkout. Use one of the money filters to return the value in a monetary format.
+
+subtotal_price :
+Returns the sum of the the cart's line-item prices after any line-item discount or cart discount has been deducted. The subtotal doesn't include taxes (unless taxes are included in the prices) or shipping costs.
+
+tax_lines :
+Returns all the tax lines of the checkout.
+
+tax_price :
+Returns the tax price of the checkout, whether the taxes are included or not in the prices. Use one of the money filters to return the value in a monetary format.
+
+total_price :
+Returns the total price of the checkout. Use one of the money filters to return the value in a monetary format.
+
+transactions :
+Returns an array of transactions from the checkout.
+
+Address :
+name :
+Returns the values of the First Name and Last Name fields of the address.
+
+first_name :
+Returns the value of the First Name field of the address.
+
+last_name :
+Returns the value of the Last Name field of the address.
+
+address1 :
+Returns the value of the Address1 field of the address.
+
+address2 :
+Returns the value of the Address2 field of the address.
+
+street :
+Returns the combined values of the Address1 and Address2 fields of the address.
+
+company :
+Returns the value of the Company field of the address.
+
+city :
+Returns the value of the City field of the address.
+
+province :
+Returns the value of the Province/State field of the address.
+
+province_code :
+Returns the abbreviated value of the Province/State field of the address.
+
+zip :
+Returns the value of the Postal/Zip field of the address.
+
+country :
+Returns the value of the Country field of the address.
+
+country_code :
+Returns the value of the Country field of the address in ISO 3166-2 standard format.
+
+phone :
+Returns the value of the Phone field of the address.
+
+Discount :
+id :
+Returns the id of the discount.
+
+title :
+Returns the title or discount code of the discount.
+
+code :
+Returns the title or discount code of the discount. Same as discount.title.
+
+amount :
+Returns the amount of the discount. Use one of the money filters to return the value in a monetary format.
+
+total_amount :
+Returns the total amount of the discount if it has been applied to multiple line items. Use a money filter to return the value in a monetary format.
+
+savings :
+Returns the amount of the discount's savings. The negative opposite of amount. Use one of the money filters to return the value in a monetary format.
+
+total_savings :
+Returns the total amount of the discount's savings if it has been applied to multiple line items. The negative opposite of total_amount. Use a money filter to return the value in a monetary format.
+
+type :
+Returns the type of the discount. The possible values of discount.type are:
+
+FixedAmountDiscount
+PercentageDiscount
+ShippingDiscount
+Fulfillment :
+tracking_company :
+Returns the name of the fulfillment service.
+
+tracking_number :
+Returns a fulfillment's tracking number, if it exists.
+
+tracking_url :
+Returns the URL for a tracking number.
+
+fulfillment_line_items :
+Returns an array of all line items and their quantity included in the fulfillment. Any line items that have already been fulfilled, or are yet to be fulfilled, will not be included in the array.
+
+item_count :
+Returns the total number of items included in the fulfillment.
+
+Gift Card :
+The gift_card object can be accessed in the following templates:
+
+The gift_card object can be accessed in the following templates:
+The gift_card.liquid template.
+balance :
+Returns the amount of money remaining on the gift card.
+
+code :
+Returns the code that was used to redeem the gift card.
+
+currency :
+Returns the currency that the card was issued in.
+
+customer :
+Returns the customer variable of the customer that the gift card is assigned to.
+
+enabled :
+Returns true if the card is enabled, or false if the card is disabled.
+
+expired :
+Returns true if the card is expired, or false if the card is not.
+
+expires_on :
+Returns the expiration date of the gift card
+
+initial_value :
+Returns the initial amount of money on the gift card.
+
+properties :
+Returns the line item properties assigned to the gift card when it was added to the cart.
+
+url :
+Returns the unique URL that links to the gift card's page on the shop (rendered through gift_card.liquid).
+
+Line Item :
+A line_item represents a single line in the shopping cart. There is one line item for each distinct product variant in the cart.
+
+he line_item object can be accessed in all Liquid templates via cart.items, in notification email templates via line_items, on the order status page of the checkout, as well as in apps such as Order Printer.
+
+The line_item object has the following attributes:
+
+discounts :
+Returns any discounts that scripts have applied to the line item. Only has a value if you are using the Script Editor app.
+
+fulfillment :
+Returns the fulfillment of the line item.
+
+fulfillment_service :
+Returns the fulfillment service associated with the line item's variant. Line items that have no fulfillment service will return manual.
+
+gift_card :
+Returns true if the line item's product is a gift card, or false if it is not.
+
+grams :
+Returns the weight of the line item. Use the weight_with_unit filter to format the weight.
+
+image :
+Returns the line item's image.
+
+You can apply the img_url filter directly to the line item instead of its image attribute. This will generate a working image URL for any object with an image attribute (variant, product, line item, collection), image object, or image src. This is useful for line items, since it will output the item's variant image or the product's featured image if no variant image exists.
+
+key :
+Returns the line item key, a unique identifier for the line item. The line item key is constructed from the line item's variant ID plus a hash of the line item's properties, even if the item has no additional properties.
+
+line_price :
+Returns the combined price of all the items in the line_item. This is equal to line_item.price times line_item.quantity.
+
+message :
+Returns the discount message if a script has applied a discount to the line item. Only has a value if you are using the Script Editor app.
+
+oriignal_line_price :
+Returns the original price of the line item before discounts were applied. Only has a value if you are using the Script Editor app.
+
+original_price :
+Returns the original price of the line item before discounts were applied. Only has a value if you are using the Script Editor app.
+
+price :
+Returns the price of the line item's variant.
+
+product :
+Returns the product of the line item.
+
+product_id :
+Returns the ID of the line item's product.
+
+properties :
+Returns an array of custom information for an item that has been added to the cart.
+
+quantity :
+Returns the quantity of the line item.
+
+requires_shipping :
+Returns true if the variant of the line item requires shipping, or false if it does not.
+
+sku :
+Returns the SKU (stock keeping unit) of the line item's variant.
+
+taxable :
+Returns true if taxes are charged on the line item's variant, or false if they are not.
+
+successfully_fulfilled_quantity :
+Returns the successfully fulfilled quantity of the line item.
+
+title :
+Returns the title of the line item. line_item.title combines both the line item's product.title and the line item's variant.title, separated by a hyphen.
+
+total_discount :
+Returns the total amount of all discounts applied to the line item. Only has a value if you are using the Script Editor app.
+
+url :
+Returns the relative URL of the line item's variant. The relative URL does not include your store's root URL (mystore.myshopify.com).
+
+variant :
+Returns the variant of the line item.
+
+variant_id :
+Returns the ID of the line item's variant.
+
+vendor :
+Returns the vendor of the line item's product.
+
+id :
+Returns the ID of the line item, which is a unique ID generated for the cart.
+
+Tax Line :
+title :
+Returns the title of the tax.
+
+price :
+Returns the amount of the tax. Use one of the money filters to return the value in a monetary format.
+
+rate :
+Returns the rate of the tax in decimal notation.
+
+rate_percentage :
+Returns the rate of the tax in percentage format.
+
+Transaction :
+id :
+Returns a unique numeric identifier for the transaction.
+
+amount :
+Returns the amount of the transaction. Use one of the money filters to return the value in a monetary format.
+
+name :
+Returns the name of the transaction.
+
+status :
+Returns the status of the transaction.
+
+status_label :
+Returns the translated output of a transaction's status.
+
+create_at :
+Returns the timestamp of when the transaction was created. Use the date filter to format the timestamp.
+
+receipt :
+Returns text with information from the payment gateway about the payment receipt. This includes whether the payment was a test case and an authorization code if one was included in the transaction.
+
+kind :
+ 
+gateway :
+Returns the type of transaction. There are five transaction types:
+
+authorization: is the reserving of money that the customer has agreed to pay.
+capture: is the transfer of the money that was reserved during the authorization stage.
+sale: is a combination of authorization and capture, performed in one step.
+void: is the cancellation of a pending authorization or capture.
+refund: is the partial or full refund of the captured money to the customer.
+gateway :
+Returns the name of the payment gateway used for the transaction.
+
+payment_details :
+The payment_details object contains additional properties related to the payment method used in the transaction.
+
+Shipping Method :
+handle :
+Returns the handle of the shipping method. The price of the shipping rate is appended to the end of the handle.
+
+price :
+Returns the price of the shipping method. Use a money filter to return the value in a monetary format.
+
+title :
+Returns the title of the shipping method.
+
+Country option tags :
+country_option_tags :
+country_option_tags creates an 'option' tag for each country. An attribute named data-provinces is set for each country, containing JSON-encoded arrays of the country's respective subregions. If a country does not have any subregions, an empty array is set for its data-provinces attribute.
+
+country_option_tags must be wrapped in 'select' HTML tags.
+
+forloop :
+The forloop object contains attributes of its parent for loop.
+
+first :
+Returns true if it's the first iteration of the for loop. Returns false if it is not the first iteration.
+
+index :
+Returns the current index of the for loop, starting at 1.
+
+index0 :
+Returns the current index of the for loop, starting at 0.
+
+last :
+Returns true if it's the last iteration of the for loop. Returns false if it is not the last iteration.
+
+length :
+Returns the number of iterations of the loop.
+
+rindex :
+Returns forloop.index in reverse order.
+
+rindex0 :
+Returns forloop.index0 in reverse order.
+
+Tablerow :
+The tablerow object is used within the tablerow tag. It contains attributes of its parent for loop.
+
+length :
+Returns the number of iterations of the tablerow loop.
+
+index :
+Returns the current index of the tablerow loop, starting at 1.
+
+index0 :
+Returns the current index of the tablerow loop, starting at 0.
+
+rindex :
+Returns tablerow.index in reverse order.
+
+rindex0 :
+Returns tablerow.index0 in reverse order.
+
+first :
+Returns true if it's the first iteration of the tablerow loop. Returns false if it is not the first iteration.
+
+last :
+Returns true if it's the last iteration of the tablerow loop. Returns false if it is not the last iteration.
+
+col :
+Returns the index of the current row, starting at 1.
+
+col0 :
+Returns the index of the current row, starting at 0.
+
+col_first :
+Returns true if the current column is the first column in a row, returns false if it is not.
+
+col_last :
+Returns true if the current column is the last column in a row, returns false if it is not.
